@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-nov-2022 23:22:16 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="p1.Personajes" table="personajes" catalog="harrypotter" optimistic-lock="version">
+        <id name="idPersonaje" type="int">
+            <column name="id_personaje" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="casas" class="p1.Casas" fetch="select">
+            <column name="Casa" not-null="true" />
+        </many-to-one>
+        <many-to-one name="escuelas" class="p1.Escuelas" fetch="select">
+            <column name="Escuela" not-null="true" />
+        </many-to-one>
+        <many-to-one name="libros" class="p1.Libros" fetch="select">
+            <column name="Libros" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="Nombre" length="50" not-null="true" />
+        </property>
+        <property name="apellido" type="string">
+            <column name="Apellido" length="50" not-null="true" />
+        </property>
+        <property name="sexo" type="string">
+            <column name="Sexo" length="10" not-null="true" />
+        </property>
+        <property name="edad" type="int">
+            <column name="Edad" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="Descripcion" length="300" not-null="true" />
+        </property>
+        <set name="casases" table="casas" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="fundador" not-null="true" />
+            </key>
+            <one-to-many class="p1.Casas" />
+        </set>
+        <set name="escuelases" table="escuelas" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="director" not-null="true" />
+            </key>
+            <one-to-many class="p1.Escuelas" />
+        </set>
+    </class>
+</hibernate-mapping>

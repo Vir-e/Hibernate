@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-nov-2022 23:22:16 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="p1.Localizaciones" table="localizaciones" catalog="harrypotter" optimistic-lock="version">
+        <id name="idLocalizacion" type="int">
+            <column name="id_localizacion" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="libros" class="p1.Libros" fetch="select">
+            <column name="Libros" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="Descripcion" length="250" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

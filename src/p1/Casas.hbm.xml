@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 24-nov-2022 23:22:16 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="p1.Casas" table="casas" catalog="harrypotter" optimistic-lock="version">
+        <id name="idCasa" type="int">
+            <column name="id_casa" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="personajes" class="p1.Personajes" fetch="select">
+            <column name="fundador" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="colores" type="string">
+            <column name="colores" length="80" not-null="true" />
+        </property>
+        <set name="personajeses" table="personajes" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="Casa" not-null="true" />
+            </key>
+            <one-to-many class="p1.Personajes" />
+        </set>
+    </class>
+</hibernate-mapping>
