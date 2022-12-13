@@ -28,7 +28,7 @@ public class Gestion {
     private final Escuelas HOGWARTS = new Escuelas(1,"Hogwarts");
     private final Casas G = new Casas(1,"Gryffindor");
     private final Casas S = new Casas(2,"Slytherin");
-    private final Casas R = new Casas(4,"Rawenclaw");
+    private final Casas R = new Casas(4,"Ravenclaw");
     private final Casas H = new Casas(3,"Hufflepuff");
     
     
@@ -51,11 +51,28 @@ public class Gestion {
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         System.out.println("Vas a agregar un nuevo personaje a la Base de Datos. A continuación añade los campos necesarios.");
+        int id_nuevoPer=0;
+        boolean id_num=false;
         
-        System.out.println("Introduce su id:");
-        int id_nuevoPer = sc.nextInt();
-        System.out.println("El id introducido es:" + id_nuevoPer);
+        do{       
+            
+            try{
+                System.out.println("Introduce su id:");
+                id_nuevoPer = Integer.parseInt(sc.nextLine());
+                id_num=true;
+                System.out.println("El id introducido es:" + id_nuevoPer);
+            
+            }catch(Exception e){
+                System.out.println("Por favor introduce un id. numerico para poder insertar un personaje");
+            }
+        }while(id_num==false);
         
+            
+            
+        
+        
+        
+ 
         System.out.println("Introduce su nombre:");
         String nom_nuevoPer = sc.next();
         System.out.println("El nombre introducido es:" + nom_nuevoPer);
@@ -109,7 +126,7 @@ public class Gestion {
             case "Slytherin":
                 casa = S;
                 break;
-            case "Rawenclaw":
+            case "Ravenclaw":
                 casa = R;
                 break;
             case "Hufflepuff":
@@ -195,7 +212,7 @@ public class Gestion {
             List<Personajes> pers = q.list();
             Personajes p = pers.get(0);
             System.out.println("¿Que campo deseas modificar su valor?");
-            System.out.println(R.getNombre());
+            
             System.out.println("Nombre | Apellido | Escuela | Casa | Edad | Sexo | Descripcion | Libro");
             String campo_a_modificar = sc.next();
             switch (campo_a_modificar.trim()){
@@ -369,6 +386,8 @@ public class Gestion {
     
     }
     
+    // CONSULTAS CON FILTRO
+    
     public String consultaNombre(SessionFactory sf,String nombre){
 
         // Abrimos una sesión (conexión a la BD)
@@ -378,17 +397,19 @@ public class Gestion {
         Query q = sesion.createQuery("from Personajes as Personajes where nombre = " +"'" + nombre +"'");
         
         List<Personajes> pers = q.list();
+        if(pers.isEmpty()){
+            System.out.println("No existen coincidencias en la Base de datos");
+        }else{
+            Iterator<Personajes> iterador= pers.iterator();
 
-        Iterator<Personajes> iterador= pers.iterator();
-        
-        // Creamos objeto auxiliar
-        Personajes pAux= null;
-        
-        while(iterador.hasNext()){
-            // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
-            pAux = iterador.next();
-            
-            System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
+            // Creamos objeto auxiliar
+            Personajes pAux= null;
+
+            while(iterador.hasNext()){
+                // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
+                pAux = iterador.next();
+
+                System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
                     "***"+"Nombre:"+pAux.getNombre()+
                     "***"+"Apellido:"+pAux.getApellido()+
                     "***"+"Sexo:"+pAux.getSexo()+
@@ -398,6 +419,7 @@ public class Gestion {
                     "***"+"Descripción:"+pAux.getDescripcion()+
                     "***"+"Libro de primera aparición:"+pAux.getLibros().getNombre()
                     );
+            }    
         }
     
         sesion.close();
@@ -418,17 +440,19 @@ public class Gestion {
         Query q = sesion.createQuery("from Personajes as Personajes where apellido = " +"'" + apellido +"'");
         
         List<Personajes> pers = q.list();
+        if(pers.isEmpty()){
+            System.out.println("No existen coincidencias en la Base de datos");
+        }else{
+             Iterator<Personajes> iterador= pers.iterator();
+        
+            // Creamos objeto auxiliar
+            Personajes pAux= null;
 
-        Iterator<Personajes> iterador= pers.iterator();
-        
-        // Creamos objeto auxiliar
-        Personajes pAux= null;
-        
-        while(iterador.hasNext()){
-            // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
-            pAux = iterador.next();
-            
-            System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
+            while(iterador.hasNext()){
+                // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
+                pAux = iterador.next();
+
+                System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
                     "***"+"Nombre:"+pAux.getNombre()+
                     "***"+"Apellido:"+pAux.getApellido()+
                     "***"+"Sexo:"+pAux.getSexo()+
@@ -438,12 +462,11 @@ public class Gestion {
                     "***"+"Descripción:"+pAux.getDescripcion()+
                     "***"+"Libro de primera aparición:"+pAux.getLibros().getNombre()
                     );
+            }
+  
         }
-    
-        sesion.close();
+   sesion.close();
         System.out.println("La sesion ha sido cerrada");
-        
-
 
        return "";
     }
@@ -458,28 +481,31 @@ public class Gestion {
         Query q = sesion.createQuery("from Personajes as Personajes where escuela = " +"'" + n +"'");
         
         List<Personajes> pers = q.list();
+        if(pers.isEmpty()){
+            System.out.println("No existen coincidencias en la Base de datos");
+        }else{
 
-        Iterator<Personajes> iterador= pers.iterator();
-        
-        // Creamos objeto auxiliar
-        Personajes pAux= null;
-        
-        while(iterador.hasNext()){
-            // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
-            pAux = iterador.next();
-            
-            System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
-                    "***"+"Nombre:"+pAux.getNombre()+
-                    "***"+"Apellido:"+pAux.getApellido()+
-                    "***"+"Sexo:"+pAux.getSexo()+
-                    "***"+"Edad:"+pAux.getEdad()+
-                    "***"+"Escuela:"+pAux.getEscuelas().getNombre()+
-                    "***"+"Casa:"+pAux.getCasas().getNombre()+
-                    "***"+"Descripción:"+pAux.getDescripcion()+
-                    "***"+"Libro de primera aparición:"+pAux.getLibros().getNombre()
-                    );
+            Iterator<Personajes> iterador= pers.iterator();
+
+            // Creamos objeto auxiliar
+            Personajes pAux= null;
+
+            while(iterador.hasNext()){
+                // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
+                pAux = iterador.next();
+
+                System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
+                        "***"+"Nombre:"+pAux.getNombre()+
+                        "***"+"Apellido:"+pAux.getApellido()+
+                        "***"+"Sexo:"+pAux.getSexo()+
+                        "***"+"Edad:"+pAux.getEdad()+
+                        "***"+"Escuela:"+pAux.getEscuelas().getNombre()+
+                        "***"+"Casa:"+pAux.getCasas().getNombre()+
+                        "***"+"Descripción:"+pAux.getDescripcion()+
+                        "***"+"Libro de primera aparición:"+pAux.getLibros().getNombre()
+                        );
+            }
         }
-    
         sesion.close();
         System.out.println("La sesion ha sido cerrada");
         
@@ -497,17 +523,19 @@ public class Gestion {
         Query q = sesion.createQuery("from Personajes as Personajes where casas = " + n );
         
         List<Personajes> pers = q.list();
+        if(pers.isEmpty()){
+            System.out.println("No existen coincidencias en la Base de datos");
+        }else{
+            Iterator<Personajes> iterador= pers.iterator();
 
-        Iterator<Personajes> iterador= pers.iterator();
-        
-        // Creamos objeto auxiliar
-        Personajes pAux= null;
-        
-        while(iterador.hasNext()){
-            // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
-            pAux = iterador.next();
-            
-            System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
+            // Creamos objeto auxiliar
+            Personajes pAux= null;
+
+            while(iterador.hasNext()){
+                // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
+                pAux = iterador.next();
+
+                System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
                     "***"+"Nombre:"+pAux.getNombre()+
                     "***"+"Apellido:"+pAux.getApellido()+
                     "***"+"Sexo:"+pAux.getSexo()+
@@ -517,6 +545,7 @@ public class Gestion {
                     "***"+"Descripción:"+pAux.getDescripcion()+
                     "***"+"Libro de primera aparición:"+pAux.getLibros().getNombre()
                     );
+            }    
         }
     
         sesion.close();
@@ -536,17 +565,19 @@ public class Gestion {
         Query q = sesion.createQuery("from Personajes as Personajes where sexo = " + "'" + s + "'" );
         
         List<Personajes> pers = q.list();
+        if(pers.isEmpty()){
+            System.out.println("No existen coincidencias en la Base de datos");
+        }else{
+            Iterator<Personajes> iterador= pers.iterator();
 
-        Iterator<Personajes> iterador= pers.iterator();
-        
-        // Creamos objeto auxiliar
-        Personajes pAux= null;
-        
-        while(iterador.hasNext()){
-            // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
-            pAux = iterador.next();
-            
-            System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
+            // Creamos objeto auxiliar
+            Personajes pAux= null;
+
+            while(iterador.hasNext()){
+                // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
+                pAux = iterador.next();
+
+                System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
                     "***"+"Nombre:"+pAux.getNombre()+
                     "***"+"Apellido:"+pAux.getApellido()+
                     "***"+"Sexo:"+pAux.getSexo()+
@@ -556,6 +587,7 @@ public class Gestion {
                     "***"+"Descripción:"+pAux.getDescripcion()+
                     "***"+"Libro de primera aparición:"+pAux.getLibros().getNombre()
                     );
+            }    
         }
     
         sesion.close();
@@ -576,17 +608,19 @@ public class Gestion {
         Query q = sesion.createQuery("from Personajes as Personajes where libros = " + n );
         
         List<Personajes> pers = q.list();
+        if(pers.isEmpty()){
+            System.out.println("No existen coincidencias en la Base de datos");
+        }else{
+            Iterator<Personajes> iterador= pers.iterator();
 
-        Iterator<Personajes> iterador= pers.iterator();
-        
-        // Creamos objeto auxiliar
-        Personajes pAux= null;
-        
-        while(iterador.hasNext()){
-            // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
-            pAux = iterador.next();
-            
-            System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
+            // Creamos objeto auxiliar
+            Personajes pAux= null;
+
+            while(iterador.hasNext()){
+                // Vamos guardando en ese auxiliar cada iteracion del listado de la consulta y lo imprimimos
+                pAux = iterador.next();
+
+                System.out.println("Id. Personaje:"+pAux.getIdPersonaje()+
                     "***"+"Nombre:"+pAux.getNombre()+
                     "***"+"Apellido:"+pAux.getApellido()+
                     "***"+"Sexo:"+pAux.getSexo()+
@@ -596,17 +630,14 @@ public class Gestion {
                     "***"+"Descripción:"+pAux.getDescripcion()+
                     "***"+"Libro de primera aparición:"+pAux.getLibros().getNombre()
                     );
+            }    
         }
     
         sesion.close();
         System.out.println("La sesion ha sido cerrada");
         
-
-
        return "";
     }
     
-    
-    
-    
+  
 }
